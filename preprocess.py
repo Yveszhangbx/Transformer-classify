@@ -3,7 +3,7 @@
 
 # In[3]:
 
-
+import sys
 import pandas as pd
 import numpy as np
 import re
@@ -14,10 +14,11 @@ import os
 # In[ ]:
 
 
-path = os.getcwd()
+inpath = sys.argv[1]
+outpath = sys.argv[2]
 
 #Positive sample set
-buys = pd.read_table(path+'/yoochoose-buys.dat',
+buys = pd.read_table(inpath+'/yoochoose-buys.dat',
 names=['s_id','time_strap','i_id','price','quantity'],sep=',',dtype={'s_id':np.int64,'i_id':np.int64,'price':np.int64,'quantity':np.int64})
 buy=np.unique(buys.s_id)
 
@@ -29,7 +30,7 @@ def timeconv(string):
     return ''.join(m)
 
 #Train data
-click = pd.read_table(path+'/yoochoose-clicks.dat',
+click = pd.read_table(inpath+'/yoochoose-clicks.dat',
 names=['s_id','time_strap','i_id','c_id'],error_bad_lines=False,
                        sep=',',chunksize=1000000,converters={'time_strap':timeconv},dtype={'i_id':str,'c_id':str})
 click_lst=[]
@@ -78,13 +79,13 @@ for i in range(34):
     ts[:2]=[ts[1]]
     ind[:2]=[ind[1]]
     cat[:2]=[cat[1]]
-    with open(path+'/time{}.txt'.format(i),'w') as f:
+    with open(outpath+'/time{}.txt'.format(i),'w') as f:
         for j in ts:
             f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
-    with open(path+'/idx{}.txt'.format(i),'w') as f:
+    with open(outpath+'/idx{}.txt'.format(i),'w') as f:
         for j in ind:
             f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
-    with open(path+'/cat{}.txt'.format(i),'w') as f:
+    with open(outpath+'/cat{}.txt'.format(i),'w') as f:
         for j in cat:
             f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
     with open(path+'/y{}.txt'.format(i),'w') as f:
