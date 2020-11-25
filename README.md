@@ -5,7 +5,7 @@ Reimplement of transformer on session classification
 
 Sheil et al. (2018) "Predictingpurchasingintent:AutomaticFeatureLearningusing RecurrentNeuralNetworks "
 
-## Prepare Dataset
+## Download Dataset
 The dataset we use is the 'yoo-choose' dataset in recsys2015
 
 You can download it directly from the [official websiteof recsys2015](https://2015.recsyschallenge.com/challenge.html) , which comprises three .dat files: yoochoose-buys.dat, yoochoose-clicks.dat and yoochoose-test.dat
@@ -18,3 +18,12 @@ You can use **preprocess.py** to do this job, which takes the 1st argument as th
 `python preprocess.py /transformer/input_data /transformer/output_data`
 
 Then you will get the preprocessed data in the target output directory.
+
+## Train Model
+To train the model, run the following code
+
+ `python train.py /transformer/output_data`
+ 
+ The training parameters are specified in **config.py**.
+ 
+ The model checkpoints and tensorboeard visualization result will be stored respectively in 'checkpoints' subdirectory and 'logs' subdirectory in the directory where you run this command.
