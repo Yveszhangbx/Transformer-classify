@@ -29,19 +29,6 @@ def timeconv(string):
     m[2] = str(int(m[2])//4)
     return ''.join(m)
 
-#Train data
-click = pd.read_table(inpath+'/yoochoose-clicks.dat',
-names=['s_id','time_strap','i_id','c_id'],error_bad_lines=False,
-                       sep=',',chunksize=1000000,converters={'time_strap':timeconv},dtype={'i_id':str,'c_id':str})
-click_lst=[]
-for chunk in click:
-    chunk = chunk[chunk.i_id.notnull()&chunk.c_id.notnull()]  # filter out rows with NaN
-    click_lst.append(chunk)
-clicks = pd.concat(click_lst,axis=0)
-
-
-# In[ ]:
-
 
 #Concatenate data in same session
 def to_bin(df,ts,ind,cat,y,buy):
@@ -69,25 +56,39 @@ def to_bin(df,ts,ind,cat,y,buy):
     ts.append(new_t)
     ind.append(new_i)
     cat.append(new_c)
-    
-for i in range(34):
-    ts=[]
-    ind=[]
-    cat=[]
-    y=[]
-    to_bin(clicks.iloc[1000000*i:1000000*(i+1)],ts,ind,cat,y,buy)
-    ts[:2]=[ts[1]]
-    ind[:2]=[ind[1]]
-    cat[:2]=[cat[1]]
-    with open(outpath+'/time{}.txt'.format(i),'w') as f:
-        for j in ts:
-            f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
-    with open(outpath+'/idx{}.txt'.format(i),'w') as f:
-        for j in ind:
-            f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
-    with open(outpath+'/cat{}.txt'.format(i),'w') as f:
-        for j in cat:
-            f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
-    with open(path+'/y{}.txt'.format(i),'w') as f:
-        f.write(str(y).replace('[','').replace(']',''))
 
+def preprocess(data,d_type):
+    #Train data
+    raw_data = pd.read_table(inpath+'/yoochoose-{0}.dat'.format(data),
+    names=['s_id','time_strap','i_id','c_id'],error_bad_lines=False,
+                       sep=',',chunksize=1000000,converters={'time_strap':timeconv},dtype={'i_id':str,'c_id':str})
+    data_lst=[]
+    for chunk in raw_data:
+        chunk = chunk[chunk.i_id.notnull()&chunk.c_id.notnull()]  # filter out rows with NaN
+        data_lst.append(chunk)
+    Data = pd.concat(data_lst,axis=0)
+    
+    
+    for i in range(34):
+        ts=[]
+        ind=[]
+        cat=[]
+        y=[]
+        to_bin(Data.iloc[1000000*i:1000000*(i+1)],ts,ind,cat,y,buy)
+        ts[:2]=[ts[1]]
+        ind[:2]=[ind[1]]
+        cat[:2]=[cat[1]]
+        with open(outpath+'/{0}/time{1}.txt'.format(d_type,i),'w') as f:
+            for j in ts:
+                f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
+        with open(outpath+'/{0}/idx{1}.txt'.format(d_type,i),'w') as f:
+            for j in ind:
+                f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
+        with open(outpath+'/{0}/cat{1}.txt'.format(d_type,i),'w') as f:
+            for j in cat:
+                f.write(str(j).replace('[','').replace(']','').replace("'",'')+'\n')
+        with open(outpath+'/{0}/y{1}.txt'.format(d_type,i),'w') as f:
+            f.write(str(y).replace('[','').replace(']',''))
+
+preprocess('clicks','train_data')
+preprocess('test','test_data')
