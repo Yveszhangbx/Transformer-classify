@@ -66,7 +66,7 @@ def preprocess(data,d_type):
     for chunk in raw_data:
         chunk = chunk[chunk.i_id.notnull()&chunk.c_id.notnull()]  # filter out rows with NaN
         data_lst.append(chunk)
-    Data = pd.concat(data_lst,axis=0)
+    dt = pd.concat(data_lst,axis=0)
     
     
     for i in range(34):
@@ -74,7 +74,7 @@ def preprocess(data,d_type):
         ind=[]
         cat=[]
         y=[]
-        to_bin(Data.iloc[1000000*i:1000000*(i+1)],ts,ind,cat,y,buy)
+        to_bin(dt.iloc[1000000*i:1000000*(i+1)],ts,ind,cat,y,buy)
         ts[:2]=[ts[1]]
         ind[:2]=[ind[1]]
         cat[:2]=[cat[1]]
