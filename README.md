@@ -33,4 +33,4 @@ To train the model, run the following code
 
 `python main.py train /transformer/test_data`
 
-Before testing, you **should** copy the pickle files of 3 tokenizers in the train_data directory and paste then in the test_data directory so that test_data and be tokeized in the same way.
+Before testing, you **should** copy the pickle files of 3 tokenizers in the train_data directory and paste them in the test_data directory so that test_data and be tokeized in the same way.
