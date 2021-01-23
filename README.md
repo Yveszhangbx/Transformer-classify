@@ -6,7 +6,7 @@ Reimplement of transformer on session classification
 Sheil, H., Rana, O., & Reilly, R. (2018). Predicting purchasing intent: Automatic Feature Learning using Recurrent Neural Networks. https://arxiv.org/abs/1807.08207v1
 
 ## Environment
-Check environment.txt to see the environment and packages required
+Check **environment.txt** to see the environment and packages required
 
 ## Download Dataset
 The dataset we use is the 'yoo-choose' dataset in recsys2015
