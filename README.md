@@ -1,9 +1,10 @@
-# Transformer-classify
+# Transformer-Classify
 Reimplement of transformer on session classification
 
 **Reference:**
 
-Sheil et al. (2018) "Predictingpurchasingintent:AutomaticFeatureLearningusing RecurrentNeuralNetworks "
+Sheil, H., Rana, O., & Reilly, R. (2018). Predicting purchasing intent: Automatic Feature Learning using Recurrent Neural Networks. https://arxiv.org/abs/1807.08207v1
+
 
 ## Download Dataset
 The dataset we use is the 'yoo-choose' dataset in recsys2015
@@ -26,7 +27,7 @@ To train the model, run the following code
  
  The training parameters are specified in **config.py**.
  
- The model checkpoints and tensorboeard visualization result will be stored respectively in 'checkpoints' subdirectory and 'logs' subdirectory in the directory where you run this command. And 3 tokenizers will be automatically saved in the train_data directory.
+ The model checkpoints and tensorboard visualization result will be stored respectively in 'checkpoints' subdirectory and 'logs' subdirectory in the directory where you run this command. And 3 tokenizers will be automatically saved in the train_data directory.
  
  ## Test Model
  To test the model, run the following code
