@@ -11,6 +11,7 @@ import datetime
 import tensorflow as tf
 from tensorflow import keras
 from Transformer import *
+from LSTM_Model import *
 from data_loader import *
 from config import *
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
@@ -20,7 +21,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 
 mode = sys.argv[1]
-DATA_PATH = sys.argv[2]
+model = sys.argv[2]
+DATA_PATH = sys.argv[3]
 
 
 # In[26]:
@@ -61,7 +63,7 @@ def validate(transformer, dataset):
     accuracy = keras.metrics.SparseCategoricalAccuracy(name='val_accuracy')
     
     for (batch, (t,c,i,real)) in enumerate(dataset):
-        mask = create_mask(t)
+        mask = create_mask(t)        
         predictions = transformer(t,c,i,
                                      training=False,
                                      mask=mask)
@@ -158,7 +160,7 @@ def test():
                                      mask=mask)
         accuracy(real, predictions)
 
-    if batch % 100 == 0:
+    if batch % 10 == 0:
         print('Batch {} Accuracy {:.4f}'.format(batch, accuracy.result()))
     
     print('\nVal Accuracy {}\n'.format(accuracy.result()))
@@ -168,17 +170,28 @@ def test():
 
 
 #Define the model
-transformer = Transformer(
-num_layers = LAYER_NUM,
-d_model = D_MODEL,
-num_heads = HEAD_NUM,
-dff= 4*D_MODEL,
-size_t=size_t,
-size_c=size_c,
-size_i=size_i,
-seq_len=MAXLEN
-)
 
+if model == 'LSTM':
+    transformer = LSTM_Model(
+    d_model = D_MODEL,
+    size_t=size_t+1,
+    size_c=size_c+1,
+    size_i=size_i+1,
+    seq_len=MAXLEN
+    )
+
+else:
+    transformer = Transformer(
+    num_layers = LAYER_NUM,
+    d_model = D_MODEL,
+    num_heads = HEAD_NUM,
+    dff= 4*D_MODEL,
+    size_t=size_t+1,
+    size_c=size_c+1,
+    size_i=size_i+1,
+    seq_len=MAXLEN
+    )
+    
 # Define the optimizer
 learning_rate = CustomSchedule(D_MODEL)
 optimizer = keras.optimizers.Adam(learning_rate, beta_1=beta_1,
